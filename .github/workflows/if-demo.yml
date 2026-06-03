@@ -8,8 +8,8 @@ jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Step with if
-        if: ${{ github.ref == 'refs/headss/main' }}
+      - name: Run if the branch is main
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: echo "Running from main branch"
       - name: Run this step
         run: echo "No if statememnt"
