@@ -9,7 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run if the branch is main
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'develop' }}
         run: echo "Running from main branch"
-      - name: Run this step
-        run: echo "No if statememnt"
