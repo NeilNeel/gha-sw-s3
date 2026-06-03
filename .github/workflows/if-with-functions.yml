@@ -1,0 +1,44 @@
+name: Nice If example
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+jobs:
+  quality_checks:
+    if: startsWith(github.ref_name, 'feature') && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Perform code quality_checks
+        run: echo "Performing code quality_checks..."
+
+  dev_deploy:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'develop' && github.event_name == 'push'
+    steps:
+      - name: Dev Deploy
+        run: echo "Deploying the code to development env"
+
+  prod_deploy:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'main' && github.event_name == 'push'
+    steps:
+      - name: Prod Deploy
+        run: echo "Deploying the code to production env..."
+
+  success_notify:
+    runs-on: ubuntu-latest
+    needs: ['quality_checks', 'dev_deploy', 'prod_deploy']
+    if: always() && !failure()
+    steps:
+      - name: Success Notify
+        run: echo "The workflow completed successfully"
+
+  failure_notify:
+    runs-on: ubuntu-latest
+    needs: ['quality_checks', 'dev_deploy', 'prod_deploy']
+    if: always() && failure()
+    steps:
+      - name: Failure Notify
+        run: echo "The workflow failed. Fix the issues and try again"
